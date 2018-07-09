@@ -82,17 +82,28 @@ app.controller("addView",function($scope,$http){
         {id:"W",val:"网球"}
         
     ],
-    $scope.addSubmit= function(){
-        alert($scope.person.name);
-        $http.post("/add/data",$scope.person).then(function(resp){
+     $scope.addSubmit= function(){
+        
+    $http.get("/data/persons.json").then(function(resp){
+        $scope.pers = resp.data;
+    }),
+        
+        //循环遍历
+        angular.forEach($scope.pers,function(item,key){
+         if(item.name == $scope.person.name){
+             alert("用户已存在");
+         }else{
+          $http.post("/add/data",$scope.person).then(function(resp){
             console.log("Add  Successfully" + resp.status);
         },function(resp){
             console.log("Add  Failed" + resp.status);
         });
-    }
+         }
+      })
+    };
 });
 
-//author:fakuy
+//author:Denry
 //date:2018.07.07
 
 
